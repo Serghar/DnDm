@@ -1,0 +1,15 @@
+{
+  "name": "dndmanager",
+  "version": "0.0.1",
+  "description": "A small electron app to help manage some Dungeon Master tasks for 5th edition Dungeons and Dragons",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dylan Sharkey",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^1.4.12",
+    "sql.js": "^0.4.0"
+  }
+}
