@@ -4,12 +4,49 @@
   "description": "A small electron app to help manage some Dungeon Master tasks for 5th edition Dungeons and Dragons",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "concurrently \"install-app-deps\" \"node node_modules/fbjs-scripts/node/check-dev-engines.js package.json\"",
+    "start": "cross-env NODE_ENV=production electron ./app/ --enable-logging",
+    "dev": "NODE_ENV='development' npm run start",
+    "dist": "build -mwl --x64 --ia32"
   },
-  "author": "Dylan Sharkey",
+  "author": {
+    "name": "Dylan Sharkey",
+    "email": "serghar12@gmail.com",
+    "url": "https://github.com/Serghar"
+  },
   "license": "MIT",
   "dependencies": {
+    "sqlite3": "^3.1.8"
+  },
+  "devDependencies": {
     "electron": "^1.4.12",
-    "sql.js": "^0.4.0"
+    "electron-builder": "^16.2.1"
+  },
+  "build": {
+    "productName": "Dungeon Master Manager",
+    "appId": "com.sakugara.dndmanager",
+    "dmg": {
+      "title": "Dungeon Manager",
+      "icon": "./build/icon.icns",
+      "background": "./build/background.png"
+    },
+    "win": {
+      "icon": "./build/icon.ico"
+    }
+  },
+  "keywords": [
+    "electron",
+    "dm",
+    "dungeons and dragons",
+    "react"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Serghar/DnDm.git"
+  },
+  "homepage": "https://github.com/Serghar/DnDm#readme",
+  "devEngines": {
+    "node": ">=6.x",
+    "npm": ">=3.x"
   }
 }

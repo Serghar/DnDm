@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
@@ -36,7 +36,8 @@ function createWindow () {
   }))
 
   
-  win.webContents.openDevTools()
+  // This Line enables an immediate opening of chrome browser DevTool on Window start
+  // win.webContents.openDevTools()
   win.maximize()
 
 
