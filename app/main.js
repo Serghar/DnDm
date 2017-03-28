@@ -37,7 +37,7 @@ function createWindow () {
 
   
   // This Line enables an immediate opening of chrome browser DevTool on Window start
-  // win.webContents.openDevTools()
+  win.webContents.openDevTools()
   win.maximize()
 
 

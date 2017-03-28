@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "lint-fix": "npm run lint -- --fix",
-    "postinstall": "",
+    "postinstall": "concurrently \"cross-env NODE_ENV=production npm run rebuild\" \"install-app-deps\"",
+    "rebuild": "electron-rebuild -f -w sqlite3",
     "start": "cross-env NODE_ENV=production electron ./app/",
     "dev": "NODE_ENV='development' npm run start",
     "dist": "build -mwl --x64 --ia32"
@@ -36,14 +37,23 @@
     "babel-preset-env": "^1.1.8",
     "babel-preset-react": "^6.22.0",
     "babili-webpack-plugin": "^0.0.11",
+    "concurrently": "^3.1.0",
     "cross-env": "^3.2.4",
     "css-loader": "^0.26.1",
     "electron": "^1.4.12",
     "electron-builder": "^16.2.1",
+    "electron-rebuild": "^1.5.7",
     "eslint": "^3.14.0",
     "eslint-config-airbnb": "^14.0.0",
     "eslint-formatter-pretty": "^1.1.0",
+    "eslint-import-resolver-webpack": "^0.8.1",
+    "eslint-plugin-compat": "^1.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jest": "^19.0.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-react": "^6.9.0",
+    "fbjs-scripts": "^0.7.1",
     "jest": "^19.0.2",
     "webpack": "^2.3.2",
     "webpack-dev-server": "^2.4.1"
@@ -53,11 +63,11 @@
     "appId": "com.sakugara.dndmanager",
     "dmg": {
       "title": "Dungeon Manager",
-      "icon": "./build/icon.icns",
-      "background": "./build/background.png"
+      "icon": "./resources/icon.icns",
+      "background": "./resources/background.png"
     },
     "win": {
-      "icon": "./build/icon.ico"
+      "icon": "./resources/icon.ico"
     }
   },
   "keywords": [
