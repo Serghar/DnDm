@@ -24,6 +24,7 @@ app/node_modules
 # app/main.js
 # main.js
 dist
+*.db
 
 .idea
 npm-debug.log.*
