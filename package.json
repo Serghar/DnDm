@@ -16,6 +16,10 @@
     "email": "serghar12@gmail.com",
     "url": "https://github.com/Serghar"
   },
+  "contributors": [{
+    "name": "Asher Israel",
+    "email": "Asherjisrael@gmail.com"
+  }],
   "license": "MIT",
   "dependencies": {
     "font-awesome": "^4.7.0",
