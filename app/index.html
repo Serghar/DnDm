@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>DnD Manager, for now...</title>
+    <link rel="stylesheet" href="bower_components/skeleton-framework/dist/skeleton.min.css">
+  </head>
+  <body>
+    <div id="root">
+    </div>
+    <script type="text/jsx">
+      import React from 'react';
+      import ReactDOM from 'react-dom';
+      import {AppContainer} from 'react-hot-loader';
+      import App from './src/containers/App';
+
+      const render = () => {
+        ReactDOM.render(<AppContainer><App /></AppContainer>, document.getElementById('root'));
+      }
+
+      render();
+      if (module.hot) {
+        module.hot.accept(render);
+      }
+    </script>
+  </body>
+</html>
