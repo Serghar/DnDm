@@ -9,12 +9,13 @@ class InitiativeApp extends Component {
     let test = new Entity(12);
     this.state = {
       entities: [],
-      delayedEntities: [test],
+      delayedEntities: [],
       entityName: "",
       entityRace: "",
       entityClass: "",
       entityInitiative: 0,
-      turnIndicator:0
+      turnIndicator: 0,
+      movingItem: null
     };
     this.setState = this.setState.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -29,13 +30,24 @@ class InitiativeApp extends Component {
   }
 
   drag(e) {
-    e.dataTransfer.setData("text/html", e.target);
+    // Grab the li element
+    e.dataTransfer.setData("text/html", e.target.outerHTML);
+    this.setState({movingItem: e.target});
   }
 
   drop(e) {
     e.preventDefault();
-    let movingEntity = e.dataTransfer.getData("text/html");
-    e.target.insertBefore(movingEntity);
+    // let parser = new DOMParser();
+    // let movingEntity = e.dataTransfer.getData("text/html");
+    // console.log(movingEntity);
+    // movingEntity = parser.parseFromString(movingEntity, "text/html")
+    // movingEntity = movingEntity.body.firstChild;
+    // console.log(movingEntity);
+    console.log(e.target);
+    console.log(e.target.parentElement);
+    e.target.parentElement.insertBefore(this.state.movingItem, e.target);
+
+    this.setState({movingItem: null});
   }
 
   handleChange(e) {
@@ -44,7 +56,8 @@ class InitiativeApp extends Component {
     this.setState({[targetName]: newValue});
   }
 
-  addEntity() {
+  addEntity(e) {
+    e.preventDefault();
     let newEntity = new Entity(this.state.entityInitiative,this.state.entityName, this.state.entityRace, this.state.entityClass);
     let entities = this.state.entities.slice();
     if ( entities.length == 0 ) {

@@ -5,19 +5,19 @@ class EntityDisplay extends Component {
                 if(this.props.entity.name) {
                         if(this.props.entity.class) {
                                 return (
-                                        <p>{this.props.entity.name}, the {this.props.entity.race} {this.props.entity.class}</p>
+                                        <li onDrop={(e) => this.props.drop(e)} onDragOver={(e) => this.props.allowDrop(e)} draggable="true" onDragStart={(e) => this.props.drag(e)}>{this.props.entity.name}, the {this.props.entity.race} {this.props.entity.class}</li>
                                 )
                         }
                         return (
-                                <p>{this.props.entity.name}, the {this.props.entity.race}</p>
+                                <li onDrop={(e) => this.props.drop(e)} onDragOver={(e) => this.props.allowDrop(e)} draggable="true" onDragStart={(e) => this.props.drag(e)}>{this.props.entity.name}, the {this.props.entity.race}</li>
                         )
                 } else if(this.props.entity.class) {
                         return (
-                                <p>{this.props.entity.race} {this.props.entity.class}</p>
+                                <li onDrop={(e) => this.props.drop(e)} onDragOver={(e) => this.props.allowDrop(e)} draggable="true" onDragStart={(e) => this.props.drag(e)}>{this.props.entity.race} {this.props.entity.class}</li>
                         )
                 }
                 return (
-                        <p>{this.props.entity.race}</p>
+                        <li onDrop={(e) => this.props.drop(e)} onDragOver={(e) => this.props.allowDrop(e)} draggable="true" onDragStart={(e) => this.props.drag(e)}>{this.props.entity.race}</li>
                 )
         }
 }

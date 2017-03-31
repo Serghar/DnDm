@@ -1,0 +1,14 @@
+.entity-list {
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 3px;
+    min-height: 5vh;
+}
+
+body {
+    min-height: 100vh;
+}
+
+#root {
+    height: 100vh;
+}
