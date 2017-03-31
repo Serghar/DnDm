@@ -7,7 +7,7 @@ class FormElement extends Component {
                 <span>
                     {this.props.title}
                 </span>
-                <input name={this.props.name} onChange={this.props.handler} type={this.props.type} value={this.props.value}/>
+                <input name={this.props.name} onChange={(e) => this.props.handler(e)} type={this.props.type} value={this.props.value}/>
             </div>
         )
     }

@@ -1,23 +1,41 @@
 import React, { Component } from 'react';
-import FormElement from '../components/FormElement';
 import Entity from '../classes/entity';
-import EntityList from '../components/EntityList';
+import InitiativeDisplay from '../components/InitiativeDisplay';
 
 class InitiativeApp extends Component {
 
   constructor() {
     super();
+    let test = new Entity(12);
     this.state = {
       entities: [],
-      delayedEntities: [],
+      delayedEntities: [test],
       entityName: "",
       entityRace: "",
       entityClass: "",
       entityInitiative: 0,
       turnIndicator:0
-    }
+    };
     this.setState = this.setState.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.addEntity = this.addEntity.bind(this);
+    this.allowDrop = this.allowDrop.bind(this);
+    this.drag = this.drag.bind(this);
+    this.drop = this.drop.bind(this);
+  }
+
+  allowDrop(e) {
+    e.preventDefault();
+  }
+
+  drag(e) {
+    e.dataTransfer.setData("text/html", e.target);
+  }
+
+  drop(e) {
+    e.preventDefault();
+    let movingEntity = e.dataTransfer.getData("text/html");
+    e.target.insertBefore(movingEntity);
   }
 
   handleChange(e) {
@@ -47,18 +65,7 @@ class InitiativeApp extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <div>
-          <FormElement type="text" name="entityName" value={this.state.entityName} title="Name" handler={this.handleChange}/>
-          <FormElement type="text" name="entityRace" value={this.state.entityRace} title="Race" handler={this.handleChange}/>
-          <FormElement type="text" name="entityClass" value={this.state.entityClass} title="Class" handler={this.handleChange}/>
-          <FormElement type="number" name="entityInitiative" value={this.state.entityInitiative} title="Initiative" handler={this.handleChange}/>
-          <button onClick={() => this.addEntity()}>Add Entity</button>
-        </div>
-        <EntityList entities={this.state.entities}/>
-      </div>
-    );
+    return <InitiativeDisplay data={this.state} handleChange={this.handleChange} addEntity={this.addEntity} allowDrop={this.allowDrop} drag={this.drag} drop={this.drop}/>;
   }
 }
 
