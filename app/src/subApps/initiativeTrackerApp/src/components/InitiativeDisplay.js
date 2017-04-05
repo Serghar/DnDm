@@ -15,8 +15,8 @@ class InitiativeDisplay extends Component {
                     <button type="submit">Add Entity</button>
                 </form>
                 <div className="row">
-                    <EntityList entities={this.props.data.entities} classes="entity-list six columns" drag={this.props.drag} allowDrop={this.props.allowDrop} drop={this.props.drop}/>
-                    <EntityList entities={this.props.data.delayedEntities} classes="entity-list five columns" drag={this.props.drag} allowDrop={this.props.allowDrop} drop={this.props.drop}/>
+                    <EntityList id="entities" entities={this.props.data.entities} classes="entity-list six columns" drag={this.props.drag} allowDrop={this.props.allowDrop} drop={this.props.drop} hoverOut={this.props.hoverOut} hoverIn={this.props.hoverIn}/>
+                    <EntityList id="delayed" entities={this.props.data.delayedEntities} classes="entity-list five columns" drag={this.props.drag} allowDrop={this.props.allowDrop} drop={this.props.drop} hoverOut={this.props.hoverOut} hoverIn={this.props.hoverIn}/>
                 </div>
             </div>
         )

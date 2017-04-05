@@ -12,3 +12,13 @@ body {
 #root {
     height: 100vh;
 }
+
+li {
+    margin: 0 0 0 0;
+    height: 2em;
+    bottom: 0;
+}
+
+.opaque {
+    opacity: 0.5;
+}
