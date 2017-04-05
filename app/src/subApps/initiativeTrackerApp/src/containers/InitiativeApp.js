@@ -6,7 +6,6 @@ class InitiativeApp extends Component {
 
   constructor() {
     super();
-    let test = new Entity(12);
     this.state = {
       entities: [],
       delayedEntities: [],
@@ -14,63 +13,20 @@ class InitiativeApp extends Component {
       entityRace: "",
       entityClass: "",
       entityInitiative: 0,
-      turnIndicator: 0
+      turnIndicator: 0,
+      movingEntityId: null
     };
-    this.setState = this.setState.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.addEntity = this.addEntity.bind(this);
-    this.allowDrop = this.allowDrop.bind(this);
-    this.drag = this.drag.bind(this);
-    this.drop = this.drop.bind(this);
-    this.generateUUID = this.generateUUID.bind(this);
-    this.hoverOut = this.hoverOut.bind(this);
-    this.hoverIn = this.hoverIn.bind(this);
   }
 
-  allowDrop(e) {
+  allowDrop = (e) => {
     e.preventDefault();
   }
 
-  hoverIn(e) {
+  dragIn = (e) => {
     e.preventDefault();
-    // console.log("hover in");
-    // let movingEntity = e.dataTransfer.getData("text");
-    // console.log("movingentity", movingEntity);
-    // movingEntity = document.getElementById(movingEntity);
-    // movingEntity.classList.add("opaque");
-    // if(e.target.id == "entities" || e.target.id == "delayed") {
-    //   e.target.insertBefore(movingEntity, null);
-    // } else {
-    //   e.target.parentElement.insertBefore(movingEntity, e.target);
-    // }
-  }
-
-  hoverOut(e) {
-    e.preventDefault();
-    // console.log("hover out");
-    // let movingEntity = e.dataTransfer.getData("text");
-    // movingEntity = document.getElementById(movingEntity);
-    // if(e.target.id == "entities" || e.target.id == "delayed") {
-    //   e.target.removeChild(movingEntity);
-    // } else {
-    //   e.target.parentElement.removeChild(movingEntity);
-    // }
-  }
-
-  generateUUID(a, b){
-    for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'-');
-    return b;
-  } 
-
-  drag(e) {
-    e.dataTransfer.setData("text", e.target.id);
-  }
-
-  drop(e) {
-    e.preventDefault();
-    let movingEntity = e.dataTransfer.getData("text");
-    movingEntity = document.getElementById(movingEntity);
-    console.log(e.target);
+    console.log("dragIn");
+    let movingEntity = document.getElementById(this.state.movingEntityId);
+    movingEntity.classList.add("opaque");
     if(e.target.id == "entities" || e.target.id == "delayed") {
       e.target.insertBefore(movingEntity, null);
     } else {
@@ -78,13 +34,56 @@ class InitiativeApp extends Component {
     }
   }
 
-  handleChange(e) {
+  dragOut = (e) => {
+    e.preventDefault();
+    console.log("dragOut");
+    let movingEntity = document.getElementById(this.state.movingEntityId);
+    if(e.target.id == "entities" || e.target.id == "delayed") {
+      e.target.removeChild(movingEntity);
+    } else {
+      e.target.parentElement.removeChild(movingEntity);
+    }
+  }
+
+  generateUUID = (a, b) => {
+    for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'-');
+    return b;
+  } 
+
+  drag = (e) => {
+    console.log("drag");
+    // e.dataTransfer.setData("text", e.target.id);
+    // console.log("data still held:", e.dataTransfer.getData("text"));
+    this.setState({movingEntityId: e.target.id});
+    // e.target.parentElement.removeChild(e.target);
+  }
+
+  dragEnd = (e) => {
+    e.target.classList.remove("opaque");
+  }
+
+  drop = (e) => {
+    e.preventDefault();
+    console.log("drop");
+    // let movingEntity = e.dataTransfer.getData("text");
+    // movingEntity = document.getElementById(movingEntity);
+    let movingEntity = document.getElementById(this.state.movingEntityId);
+    movingEntity.classList.remove("opaque");
+    // console.log("data still held:", e.dataTransfer.getData("text"));
+    if(e.target.id == "entities" || e.target.id == "delayed") {
+      e.target.insertBefore(movingEntity, null);
+    } else {
+      e.target.parentElement.insertBefore(movingEntity, e.target);
+    }
+  }
+
+  handleChange = (e) => {
     let targetName = e.target.name;
     let newValue = e.target.value;
     this.setState({[targetName]: newValue});
   }
 
-  addEntity(e) {
+  addEntity = (e) => {
     e.preventDefault();
     let newId = this.generateUUID();
     let newEntity = new Entity(newId, this.state.entityInitiative,this.state.entityName, this.state.entityRace, this.state.entityClass);
@@ -107,7 +106,7 @@ class InitiativeApp extends Component {
   }
 
   render() {
-    return <InitiativeDisplay data={this.state} handleChange={this.handleChange} addEntity={this.addEntity} allowDrop={this.allowDrop} drag={this.drag} drop={this.drop} hoverOut={this.hoverOut} hoverIn={this.hoverIn}/>;
+    return <InitiativeDisplay data={this.state} handleChange={this.handleChange} addEntity={this.addEntity} allowDrop={this.allowDrop} drag={this.drag} drop={this.drop} dragOut={this.dragOut} dragIn={this.dragIn} dragEnd={this.dragEnd}/>;
   }
 }
 
