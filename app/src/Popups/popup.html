@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Import Modules</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/jsx">
+      import React from 'react';
+      import ReactDOM from 'react-dom';
+      import {AppContainer} from 'react-hot-loader';
+      import Import from './ImportModules/Import';
+
+      const render = () => {
+        ReactDOM.render(
+           <Import />
+            , document.getElementById('root'));
+      }
+      render();
+      if (module.hot) {
+        module.hot.accept(render);
+      }
+    </script>
+  </body>
+</html>

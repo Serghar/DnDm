@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { enableLiveReload } from 'electron-compile';
+import BuildCustomMenu from './menu';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -19,6 +20,8 @@ const createWindow = async () => {
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
+  //Add menu features
+
   // Open the DevTools.
   if (isDevMode) {
     await installExtension(REACT_DEVELOPER_TOOLS);
@@ -34,6 +37,7 @@ const createWindow = async () => {
     // when you should delete the corresponding element.
     mainWindow = null;
   });
+  BuildCustomMenu();
 };
 
 // This method will be called when Electron has finished
