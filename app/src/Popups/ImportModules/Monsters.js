@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Monsters = ({modList, updateModuleSelection}) => {
-    console.log(modList);
     const moduleItems = modList.map((mod, idx) => {
       return (
           <ModuleItem index={idx} {...mod} updateModuleSelection={updateModuleSelection}/>

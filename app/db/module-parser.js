@@ -51,7 +51,7 @@ const importModule = (selectedModule) => {
                                 if(typeof record[colName] === 'string') {
                                     values += "'" + record[colName] + "',";
                                 } else if (record[colName] instanceof Array || record[colName] instanceof Object) { 
-                                    values += JSON.stringify(record[colName]) + ",";
+                                    values += "'" + JSON.stringify(record[colName]) + "',";
                                 } else {
                                     values += record[colName] + ",";
                                 }
