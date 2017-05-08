@@ -1,8 +1,8 @@
-.entity-list {
-    display: inline-block;
-    border: 1px solid black;
-    border-radius: 3px;
-    min-height: 5vh;
+* {
+    border: red 1px dotted;
+    box-sizing: border-box;
+    padding: 0px !important;
+    margin: 0px !important;
 }
 
 body {
@@ -13,12 +13,29 @@ body {
     height: 100vh;
 }
 
-li {
-    margin: 0 0 0 0;
+.entity-list {
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 3px;
+    min-height: 7vh;
+}
+
+.entity-list-item {
+    margin: 0 0 0 0 !important;
     height: 2em;
-    bottom: 0;
+    padding-left: 3em !important;
 }
 
 .opaque {
     opacity: 0.5;
+}
+
+.list-header {
+    list-style: none;
+    border-bottom: black 1px solid;
+    text-align: center;
+}
+
+.hide {
+    display: none;
 }

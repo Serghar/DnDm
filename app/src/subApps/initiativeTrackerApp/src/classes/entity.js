@@ -3,9 +3,9 @@ class Entity {
         this.id = id,
         this.name = name;
         this.initiative = init;
-        this.delaying = false;
         this.class = gameClass;
         this.race = race ? race : "?????";
+        this.moving = false;
     }
 }
 
