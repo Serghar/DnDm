@@ -3,9 +3,18 @@ import EntityDisplay from './EntityDisplay';
 
 class EntityList extends Component {
     render() {
+        if ( !this.props.turnIndicator ) {
+            this.props.turnIndicator = -1;
+        }
+
         let entities = this.props.entities.map((entity, idx) => {
+            // idx == 0 is the placeholder header entity, and should not be displayed using the EntityDisplay component
             if ( idx != 0){
-                return ( <EntityDisplay key={idx} drag={this.props.drag} dragIn={this.props.dragIn} dragEnd={this.props.dragEnd} entity={entity}/> );
+                let currentActor = false;
+                if ( idx == this.props.turnIndicator ) {
+                    currentActor = true;
+                }
+                return ( <EntityDisplay key={parseInt(idx)} drag={this.props.drag} dragIn={this.props.dragIn} dragEnd={this.props.dragEnd} entity={entity} currentActor={currentActor}/> );
             }
         });
 

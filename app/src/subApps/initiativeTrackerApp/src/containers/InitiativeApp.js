@@ -15,7 +15,7 @@ class InitiativeApp extends Component {
       entityRace: "",
       entityClass: "",
       entityInitiative: 0,
-      turnIndicator: 0,
+      turnIndicator: 1,
       movingEntity: null,
       tracker: null
     };
@@ -33,7 +33,7 @@ class InitiativeApp extends Component {
     e.preventDefault();
   }
 
-  // When an entity is dragged over current DOM element, display a preview ghost of
+  // When an entity is dragged over current DOM element, move it and make it opaque of
   // where it will go if released
   dragIn = (e) => {
     console.log("drag into", e.target.id);
@@ -45,7 +45,7 @@ class InitiativeApp extends Component {
     }
   }
 
-  // When dragged element is dropped, remove the preview ghost and modify the entity
+  // When dragged element is dropped, remove the "opaque" class and modify the entity
   // list in state to finalize the move
   drop = (e) => {
     console.log("drop");
@@ -66,8 +66,11 @@ class InitiativeApp extends Component {
     let delayedEntitiesCopy = this.state.delayedEntities.slice();
     for( let i = 0; i < entitiesCopy.length; i++ ){
       if( entitiesCopy[i].id == targetID ){
+        // if ( i < this.state.turnIndicator ) {
+        //   this.nextTurn();
+        // }
         entitiesCopy.splice(i+1, 0, entityToInsert);
-        console.log("Re-added entity to entities:", entityToInsert);
+        // console.log("Re-added entity to entities:", entityToInsert);
         this.setState({entities: entitiesCopy});
         return;
       }
@@ -75,7 +78,7 @@ class InitiativeApp extends Component {
     for( let i = 0; i < delayedEntitiesCopy.length; i++ ){
       if( delayedEntitiesCopy[i].id == targetID ){
         delayedEntitiesCopy.splice(i+1, 0, entityToInsert);
-        console.log("Re-added entity to delayedEntities:", entityToInsert);
+        // console.log("Re-added entity to delayedEntities:", entityToInsert);
         this.setState({delayedEntities: delayedEntitiesCopy});
         return;
       }
@@ -120,22 +123,23 @@ class InitiativeApp extends Component {
     let newEntity = new Entity(newId, this.state.entityInitiative, this.state.entityName, this.state.entityRace, this.state.entityClass);
     let entities = this.state.entities.slice();
     let finalIndex = entities.length-1;
-    // if ( entities.length == 0 ) {
-    //   entities.push(newEntity);
-    // } else {
-        for ( let i = 0; i <= finalIndex; i++ ) {
-            if ( newEntity.initiative > entities[i].initiative) {
-                console.log(newEntity.initiative, "greater than", entities[i].initiative);
-                entities.splice(i, 0, newEntity);
-                console.log(entities);
-                i = entities.length;
-            } else if ( i == finalIndex ) {
-                console.log(newEntity.initiative, "is the new lowest init");
-                entities.push(newEntity);
-                console.log(entities);
-            }
+
+    if ( finalIndex == 0 ) {
+      this.setState({ currentActor: newId });
+    }
+
+    for ( let i = 0; i <= finalIndex; i++ ) {
+        if ( newEntity.initiative > entities[i].initiative) {
+            // console.log(newEntity.initiative, "greater than", entities[i].initiative);
+            entities.splice(i, 0, newEntity);
+            // console.log(entities);
+            i = entities.length;
+        } else if ( i == finalIndex ) {
+            // console.log(newEntity.initiative, "is the new lowest init");
+            entities.push(newEntity);
+            // console.log(entities);
         }
-    // }
+    }
     this.setState({entities: entities,
       entityName: "",
       entityRace: "",
@@ -149,8 +153,11 @@ class InitiativeApp extends Component {
     let entitiesCopy = this.state.entities.slice();
     let delayedEntitiesCopy = this.state.delayedEntities.slice();
 
-    for( let entity of entitiesCopy) {
+    for( let [idx, entity] of entitiesCopy.entries()) {
       if( entity.id == removeId) {
+        // if ( idx < this.state.turnIndicator && !this.state.movingEntity ) {
+        //   this.rollBackTurn();
+        // }
         let removed = entitiesCopy.splice(entitiesCopy.indexOf(entity), 1);
         // this.setState({entities: entitiesCopy});
         this.state.entities = entitiesCopy;
@@ -168,9 +175,29 @@ class InitiativeApp extends Component {
     return "Entity not found";
   }
 
+  nextTurn = () => {
+    let currTurn = this.state.turnIndicator;
+    if ( currTurn == this.state.entities.length-1 ) {
+      currTurn = 1;
+    } else {
+      currTurn += 1;
+    }
+    this.setState({ turnIndicator: currTurn });
+  }
+
+  rollBackTurn = () => {
+    let currTurn = this.state.turnIndicator;
+    if ( currTurn == 1 ) {
+      currTurn = this.state.entities.length-1;
+    } else {
+      currTurn -= 1;
+    }
+    this.setState({ turnIndicator: currTurn });
+  }
+
   render() {
     // console.log("main render");
-    return <InitiativeDisplay data={this.state} handleChange={this.handleChange} addEntity={this.addEntity} allowDrop={this.allowDrop} drag={this.drag} dragIn={this.dragIn} drop={this.drop} dragEnd={this.dragEnd}/>;
+    return <InitiativeDisplay data={this.state} handleChange={this.handleChange} addEntity={this.addEntity} allowDrop={this.allowDrop} drag={this.drag} dragIn={this.dragIn} drop={this.drop} dragEnd={this.dragEnd} nextTurn={this.nextTurn} rollBackTurn={this.rollBackTurn}/>;
   }
 }
 

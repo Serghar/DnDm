@@ -6,8 +6,14 @@ class EntityDisplay extends Component {
 
                 let classes = "entity-list-item";
 
-                if( this.props.entity.moving ){
+                let indicatorClass = "hide";
+
+                if( this.props.entity.moving ) {
                         classes += " opaque";
+                }
+
+                if( this.props.currentActor ) {
+                        indicatorClass = "red"
                 }
 
                 if(this.props.entity.name) {
@@ -22,7 +28,7 @@ class EntityDisplay extends Component {
                         content = `${this.props.entity.race}`;
                 }
                 return (
-                        <li id={this.props.entity.id} className={classes} draggable="true" onDragStart={(e) => this.props.drag(e, this.props.entity)} onDragEnter={(e) => this.props.dragIn(e)} onDragEnd={(e) => this.props.dragEnd(e, this.props.entity.id)}>{content} </li>
+                        <li id={this.props.entity.id} className={classes} draggable="true" onDragStart={(e) => this.props.drag(e, this.props.entity)} onDragEnter={(e) => this.props.dragIn(e)} onDragEnd={(e) => this.props.dragEnd(e, this.props.entity.id)}>{content} <span className={indicatorClass}> &#9876 </span></li>
                 )
         }
 }

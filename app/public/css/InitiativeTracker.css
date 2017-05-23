@@ -98,3 +98,7 @@ ul.list {
 .font-medium {
     font-size: 3vh;
 }
+
+.red {
+    color: red;
+}
