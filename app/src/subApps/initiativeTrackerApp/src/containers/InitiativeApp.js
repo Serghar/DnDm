@@ -17,7 +17,7 @@ class InitiativeApp extends Component {
       entityInitiative: 0,
       turnIndicator: 1,
       movingEntity: null,
-      tracker: null
+
     };
     this.setState = this.setState.bind(this);
   }
@@ -40,8 +40,8 @@ class InitiativeApp extends Component {
     e.preventDefault();
     let movingEntity = this.state.movingEntity;
     if( e.target.id != movingEntity.id){
-      this.removeEntity(movingEntity.id);
-      this.insertEntity(e.target.id, movingEntity);
+      let sourceList = this.removeEntity(movingEntity.id);
+      let targetList = this.insertEntity(e.target.id, movingEntity);
     }
   }
 
@@ -51,46 +51,20 @@ class InitiativeApp extends Component {
     console.log("drop");
     e.preventDefault();
     let targetId = e.target.id;
-    console.log(this.state.movingEntity.id,"dropped over:", targetId);
+    // console.log(this.state.movingEntity.id,"dropped over:", targetId);
 
     let movingEntity = this.state.movingEntity;
     movingEntity.moving = false;
-    if( targetId != movingEntity.id){
-      this.removeEntity(movingEntity.id);
-      this.insertEntity(targetId, movingEntity);
-    }    
-  }
-
-  insertEntity = (targetID, entityToInsert) => {
-    let entitiesCopy = this.state.entities.slice();
-    let delayedEntitiesCopy = this.state.delayedEntities.slice();
-    for( let i = 0; i < entitiesCopy.length; i++ ){
-      if( entitiesCopy[i].id == targetID ){
-        // if ( i < this.state.turnIndicator ) {
-        //   this.nextTurn();
-        // }
-        entitiesCopy.splice(i+1, 0, entityToInsert);
-        // console.log("Re-added entity to entities:", entityToInsert);
-        this.setState({entities: entitiesCopy});
-        return;
-      }
-    }
-    for( let i = 0; i < delayedEntitiesCopy.length; i++ ){
-      if( delayedEntitiesCopy[i].id == targetID ){
-        delayedEntitiesCopy.splice(i+1, 0, entityToInsert);
-        // console.log("Re-added entity to delayedEntities:", entityToInsert);
-        this.setState({delayedEntities: delayedEntitiesCopy});
-        return;
-      }
-    }
-    console.log("Error, target not found");
-    return;
+    // if( targetId != movingEntity.id){
+    //   this.removeEntity(movingEntity.id);
+    //   this.insertEntity(targetId, movingEntity);
+    // }    
   }
 
 
   // When the element is dragged, store its info in state
   drag = (e, entity) => {
-    console.log("dragging", e.target.id);
+    // console.log("dragging", e.target.id);
     let movingEntity = document.getElementById(entity.id);
     entity.moving = true;
     this.setState({movingEntity: entity});
@@ -99,10 +73,10 @@ class InitiativeApp extends Component {
   // When a drag ends, change the entity's moving status and reset movingEntity in state
   dragEnd = (e, targetId) => {
     e.preventDefault();
-    console.log("drag ending on", targetId);
+    // console.log("drag ending on", targetId);
     let movingEntity = this.state.movingEntity;
     movingEntity.moving = false;
-    console.log("The entity moving was:",this.state.movingEntity);
+    // console.log("The entity moving was:",this.state.movingEntity);
     this.setState({movingEntity: null});
   }
 
@@ -147,21 +121,51 @@ class InitiativeApp extends Component {
       entityInitiative: 0});
   }
 
+  insertEntity = (targetID, entityToInsert) => {
+    console.log("inserting: ", entityToInsert);
+    let entitiesCopy = this.state.entities.slice();
+    let delayedEntitiesCopy = this.state.delayedEntities.slice();
+    for( let i = 0; i < entitiesCopy.length; i++ ){
+      if( entitiesCopy[i].id == targetID ){
+        if ( i < this.state.turnIndicator ) {
+          console.log("forward");
+          this.ShouldTurnUpdate(1);
+        }
+        entitiesCopy.splice(i+1, 0, entityToInsert);
+        // console.log("Re-added entity to entities:", entityToInsert);
+        this.setState({entities: entitiesCopy});
+        return "entity";
+      }
+    }
+    for( let i = 0; i < delayedEntitiesCopy.length; i++ ){
+      if( delayedEntitiesCopy[i].id == targetID ){
+        delayedEntitiesCopy.splice(i+1, 0, entityToInsert);
+        // console.log("Re-added entity to delayedEntities:", entityToInsert);
+        this.setState({delayedEntities: delayedEntitiesCopy});
+        return "delayed";
+      }
+    }
+    console.log("Error, target not found");
+    return;
+  }
+
   // Find the entity with the chosen ID and remove it from whichever list
   // contains it
   removeEntity = (removeId) => {
+    console.log("removing: ", removeId);
     let entitiesCopy = this.state.entities.slice();
     let delayedEntitiesCopy = this.state.delayedEntities.slice();
 
     for( let [idx, entity] of entitiesCopy.entries()) {
       if( entity.id == removeId) {
-        // if ( idx < this.state.turnIndicator && !this.state.movingEntity ) {
-        //   this.rollBackTurn();
-        // }
+        if ( idx < this.state.turnIndicator) {
+          console.log("rollback");
+          this.ShouldTurnUpdate(-1);
+        }
         let removed = entitiesCopy.splice(entitiesCopy.indexOf(entity), 1);
         // this.setState({entities: entitiesCopy});
         this.state.entities = entitiesCopy;
-        return removed[0];
+        return "entity";
       }
     }
     for( let entity of delayedEntitiesCopy) {
@@ -169,13 +173,22 @@ class InitiativeApp extends Component {
         let removed = delayedEntitiesCopy.splice(delayedEntitiesCopy.indexOf(entity), 1);
         // this.setState({delayedEntities: delayedEntitiesCopy});
         this.state.delayedEntities = delayedEntitiesCopy;
-        return removed[0];
+        return "delayed";
       }
     }
     return "Entity not found";
   }
 
+  ShouldTurnUpdate = (adjustment) => {
+    if ( adjustment < 0 ) {
+      this.rollBackTurn();
+    } else {
+      this.nextTurn();
+    }
+  }
+
   nextTurn = () => {
+    // console.log("turn forward");
     let currTurn = this.state.turnIndicator;
     if ( currTurn == this.state.entities.length-1 ) {
       currTurn = 1;
@@ -186,6 +199,7 @@ class InitiativeApp extends Component {
   }
 
   rollBackTurn = () => {
+    // console.log("turn backward");
     let currTurn = this.state.turnIndicator;
     if ( currTurn == 1 ) {
       currTurn = this.state.entities.length-1;

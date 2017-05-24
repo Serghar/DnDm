@@ -50,9 +50,11 @@ ul.list {
 }
 
 .entity-list-item {
-    margin: 0 0 .5vh 0;
+    margin: 0;
     height: 5vh;
-    padding-left: 3em;
+    padding-left: 6vw;
+    padding-top: .8vh;
+    padding-bottom: .8vh;
 }
 
 .parchment-top {

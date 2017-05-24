@@ -13,7 +13,7 @@ class EntityDisplay extends Component {
                 }
 
                 if( this.props.currentActor ) {
-                        indicatorClass = "red"
+                        indicatorClass = "red font-medium"
                 }
 
                 if(this.props.entity.name) {
@@ -28,7 +28,7 @@ class EntityDisplay extends Component {
                         content = `${this.props.entity.race}`;
                 }
                 return (
-                        <li id={this.props.entity.id} className={classes} draggable="true" onDragStart={(e) => this.props.drag(e, this.props.entity)} onDragEnter={(e) => this.props.dragIn(e)} onDragEnd={(e) => this.props.dragEnd(e, this.props.entity.id)}>{content} <span className={indicatorClass}> &#9876 </span></li>
+                        <li id={this.props.entity.id} className={classes} draggable="true" onDragStart={(e) => this.props.drag(e, this.props.entity)} onDragEnter={(e) => this.props.dragIn(e)} onDragEnd={(e) => this.props.dragEnd(e, this.props.entity.id)}>{content} <span className={indicatorClass}> &#9876; </span></li>
                 )
         }
 }
