@@ -16,8 +16,7 @@ class InitiativeApp extends Component {
       entityClass: "",
       entityInitiative: 0,
       turnIndicator: 1,
-      movingEntity: null,
-
+      movingEntity: null
     };
     this.setState = this.setState.bind(this);
   }
@@ -36,19 +35,29 @@ class InitiativeApp extends Component {
   // When an entity is dragged over current DOM element, move it and make it opaque of
   // where it will go if released
   dragIn = (e) => {
-    console.log("drag into", e.target.id);
+    // console.log("drag into", e.target.id);
     e.preventDefault();
     let movingEntity = this.state.movingEntity;
-    if( e.target.id != movingEntity.id){
-      let sourceList = this.removeEntity(movingEntity.id);
-      let targetList = this.insertEntity(e.target.id, movingEntity);
+    if ( e.target.id != movingEntity.id){
+      let fromLocation = this.removeEntity(movingEntity.id);
+      let toLocation = this.insertEntity(e.target.id, movingEntity);
+      console.log("from:", fromLocation, "to:", toLocation);
+      if ( fromLocation == "current" ) {
+        // Do nothing
+      } else if ( fromLocation == "before" && toLocation == "other" ) {
+        console.log("rolling back");
+        this.rollBackTurn();
+      } else if ( fromLocation == "other" && toLocation == "before" ) {
+        console.log("stepping forward");
+        this.nextTurn();
+      }
     }
   }
 
   // When dragged element is dropped, remove the "opaque" class and modify the entity
   // list in state to finalize the move
   drop = (e) => {
-    console.log("drop");
+    // console.log("drop");
     e.preventDefault();
     let targetId = e.target.id;
     // console.log(this.state.movingEntity.id,"dropped over:", targetId);
@@ -121,20 +130,24 @@ class InitiativeApp extends Component {
       entityInitiative: 0});
   }
 
-  insertEntity = (targetID, entityToInsert) => {
+  insertEntity = ( targetID, entityToInsert ) => {
     console.log("inserting: ", entityToInsert);
     let entitiesCopy = this.state.entities.slice();
     let delayedEntitiesCopy = this.state.delayedEntities.slice();
     for( let i = 0; i < entitiesCopy.length; i++ ){
       if( entitiesCopy[i].id == targetID ){
-        if ( i < this.state.turnIndicator ) {
-          console.log("forward");
-          this.ShouldTurnUpdate(1);
-        }
-        entitiesCopy.splice(i+1, 0, entityToInsert);
+        // if ( i < this.state.turnIndicator ) {
+        //   console.log("forward");
+        //   this.ShouldTurnUpdate(1);
+        // }
+        entitiesCopy.splice( i+1, 0, entityToInsert );
         // console.log("Re-added entity to entities:", entityToInsert);
         this.setState({entities: entitiesCopy});
-        return "entity";
+        if ( i < this.state.turnIndicator ) {
+          return "before";
+        } else {
+          return "other";
+        }
       }
     }
     for( let i = 0; i < delayedEntitiesCopy.length; i++ ){
@@ -142,7 +155,7 @@ class InitiativeApp extends Component {
         delayedEntitiesCopy.splice(i+1, 0, entityToInsert);
         // console.log("Re-added entity to delayedEntities:", entityToInsert);
         this.setState({delayedEntities: delayedEntitiesCopy});
-        return "delayed";
+        return "other";
       }
     }
     console.log("Error, target not found");
@@ -158,14 +171,20 @@ class InitiativeApp extends Component {
 
     for( let [idx, entity] of entitiesCopy.entries()) {
       if( entity.id == removeId) {
-        if ( idx < this.state.turnIndicator) {
-          console.log("rollback");
-          this.ShouldTurnUpdate(-1);
-        }
+        // if ( idx < this.state.turnIndicator) {
+        //   console.log("rollback");
+        //   this.ShouldTurnUpdate(-1);
+        // }
         let removed = entitiesCopy.splice(entitiesCopy.indexOf(entity), 1);
         // this.setState({entities: entitiesCopy});
         this.state.entities = entitiesCopy;
-        return "entity";
+        if ( idx == this.state.turnIndicator ) {
+          return "current";
+        } else if ( idx < this.state.turnIndicator ) {
+          return "before";
+        } else {
+          return "other";
+        }
       }
     }
     for( let entity of delayedEntitiesCopy) {
@@ -173,19 +192,19 @@ class InitiativeApp extends Component {
         let removed = delayedEntitiesCopy.splice(delayedEntitiesCopy.indexOf(entity), 1);
         // this.setState({delayedEntities: delayedEntitiesCopy});
         this.state.delayedEntities = delayedEntitiesCopy;
-        return "delayed";
+        return "other";
       }
     }
     return "Entity not found";
   }
 
-  ShouldTurnUpdate = (adjustment) => {
-    if ( adjustment < 0 ) {
-      this.rollBackTurn();
-    } else {
-      this.nextTurn();
-    }
-  }
+  // ShouldTurnUpdate = (adjustment) => {
+  //   if ( adjustment < 0 ) {
+  //     this.rollBackTurn();
+  //   } else {
+  //     this.nextTurn();
+  //   }
+  // }
 
   nextTurn = () => {
     // console.log("turn forward");
