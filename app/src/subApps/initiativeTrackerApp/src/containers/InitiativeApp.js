@@ -49,7 +49,9 @@ class InitiativeApp extends Component {
         this.rollBackTurn();
       } else if ( fromLocation == "other" && toLocation == "before" ) {
         console.log("stepping forward");
-        this.nextTurn();
+        if ( this.state.turnIndicator != this.state.entities.length-1 ){
+          this.nextTurn();
+        }
       }
     }
   }
@@ -145,6 +147,8 @@ class InitiativeApp extends Component {
         this.setState({entities: entitiesCopy});
         if ( i < this.state.turnIndicator ) {
           return "before";
+        } else if ( i == this.state.turnIndicator ) {
+          return "current";
         } else {
           return "other";
         }
@@ -178,10 +182,10 @@ class InitiativeApp extends Component {
         let removed = entitiesCopy.splice(entitiesCopy.indexOf(entity), 1);
         // this.setState({entities: entitiesCopy});
         this.state.entities = entitiesCopy;
-        if ( idx == this.state.turnIndicator ) {
-          return "current";
-        } else if ( idx < this.state.turnIndicator ) {
+        if ( idx < this.state.turnIndicator ) {
           return "before";
+        } else if ( idx == this.state.turnIndicator ) {
+          return "current";
         } else {
           return "other";
         }
