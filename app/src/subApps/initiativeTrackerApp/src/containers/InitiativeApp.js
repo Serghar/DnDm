@@ -40,17 +40,22 @@ class InitiativeApp extends Component {
     let movingEntity = this.state.movingEntity;
     if ( e.target.id != movingEntity.id){
       let fromLocation = this.removeEntity(movingEntity.id);
-      let toLocation = this.insertEntity(e.target.id, movingEntity);
+      let toResult = this.insertEntity(e.target.id, movingEntity);
+      let toLocation = toResult[0];
+      
       console.log("from:", fromLocation, "to:", toLocation);
-      if ( fromLocation == "current" ) {
-        // Do nothing
-      } else if ( fromLocation == "before" && toLocation == "other" ) {
+      if ( fromLocation == "current" && ( toLocation == "before" || toLocation == "after" ) ) {
+        console.log("moving to:", toResult[1]);
+        this.setState({ turnIndicator: toResult[1] });
+      } else if ( fromLocation == "before" && ( toLocation == "delayed" || toLocation == "current" ) ) {
         console.log("rolling back");
         this.rollBackTurn();
-      } else if ( fromLocation == "other" && toLocation == "before" ) {
+      } else if ( ( fromLocation == "delayed" || fromLocation == "after" ) && ( toLocation == "before" || toLocation == "current" ) ) {
         console.log("stepping forward");
         if ( this.state.turnIndicator != this.state.entities.length-1 ){
           this.nextTurn();
+        } else {
+          this.setState({ turnIndicator: this.state.entities.length });
         }
       }
     }
@@ -66,10 +71,6 @@ class InitiativeApp extends Component {
 
     let movingEntity = this.state.movingEntity;
     movingEntity.moving = false;
-    // if( targetId != movingEntity.id){
-    //   this.removeEntity(movingEntity.id);
-    //   this.insertEntity(targetId, movingEntity);
-    // }    
   }
 
 
@@ -136,30 +137,26 @@ class InitiativeApp extends Component {
     console.log("inserting: ", entityToInsert);
     let entitiesCopy = this.state.entities.slice();
     let delayedEntitiesCopy = this.state.delayedEntities.slice();
-    for( let i = 0; i < entitiesCopy.length; i++ ){
-      if( entitiesCopy[i].id == targetID ){
-        // if ( i < this.state.turnIndicator ) {
-        //   console.log("forward");
-        //   this.ShouldTurnUpdate(1);
-        // }
-        entitiesCopy.splice( i+1, 0, entityToInsert );
+    for ( let i = 1; i <= entitiesCopy.length; i++ ){
+      if ( entitiesCopy[i-1].id == targetID ){
+        entitiesCopy.splice( i, 0, entityToInsert );
         // console.log("Re-added entity to entities:", entityToInsert);
         this.setState({entities: entitiesCopy});
         if ( i < this.state.turnIndicator ) {
-          return "before";
+          return ["before", i]
         } else if ( i == this.state.turnIndicator ) {
-          return "current";
+          return ["current"];
         } else {
-          return "other";
+          return ["after", i]
         }
       }
     }
-    for( let i = 0; i < delayedEntitiesCopy.length; i++ ){
-      if( delayedEntitiesCopy[i].id == targetID ){
-        delayedEntitiesCopy.splice(i+1, 0, entityToInsert);
+    for ( let i = 1; i <= delayedEntitiesCopy.length; i++ ){
+      if ( delayedEntitiesCopy[i-1].id == targetID ){
+        delayedEntitiesCopy.splice(i, 0, entityToInsert);
         // console.log("Re-added entity to delayedEntities:", entityToInsert);
         this.setState({delayedEntities: delayedEntitiesCopy});
-        return "other";
+        return ["delayed"];
       }
     }
     console.log("Error, target not found");
@@ -175,10 +172,6 @@ class InitiativeApp extends Component {
 
     for( let [idx, entity] of entitiesCopy.entries()) {
       if( entity.id == removeId) {
-        // if ( idx < this.state.turnIndicator) {
-        //   console.log("rollback");
-        //   this.ShouldTurnUpdate(-1);
-        // }
         let removed = entitiesCopy.splice(entitiesCopy.indexOf(entity), 1);
         // this.setState({entities: entitiesCopy});
         this.state.entities = entitiesCopy;
@@ -187,7 +180,7 @@ class InitiativeApp extends Component {
         } else if ( idx == this.state.turnIndicator ) {
           return "current";
         } else {
-          return "other";
+          return "after";
         }
       }
     }
@@ -196,19 +189,11 @@ class InitiativeApp extends Component {
         let removed = delayedEntitiesCopy.splice(delayedEntitiesCopy.indexOf(entity), 1);
         // this.setState({delayedEntities: delayedEntitiesCopy});
         this.state.delayedEntities = delayedEntitiesCopy;
-        return "other";
+        return "delayed";
       }
     }
     return "Entity not found";
   }
-
-  // ShouldTurnUpdate = (adjustment) => {
-  //   if ( adjustment < 0 ) {
-  //     this.rollBackTurn();
-  //   } else {
-  //     this.nextTurn();
-  //   }
-  // }
 
   nextTurn = () => {
     // console.log("turn forward");
