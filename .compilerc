@@ -6,7 +6,9 @@
           [ "env", { "targets": { "electron": "1.6.2" } } ],
           "react-app"
         ],
+
         "plugins": ["transform-class-properties", "transform-async-to-generator", "transform-es2015-classes", "react-hot-loader/babel"],
+
         "sourceMaps": "inline"
       }
     },
@@ -16,7 +18,9 @@
           ["env",{"targets": {"electron": "1.6.2"}}],
           "react-app"
         ],
+
         "plugins": ["transform-class-properties", "transform-async-to-generator", "transform-es2015-classes"],
+
         "sourceMaps": "none"
       }
     }

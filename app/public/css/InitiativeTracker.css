@@ -1,0 +1,106 @@
+* {
+    /*border: red dotted 1px;*/
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+}
+
+li {
+    margin: 0;
+}
+
+ul.list {
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0;
+}
+
+#root {
+    height: 100vh;
+}
+
+.initiative-main {
+    padding: 1vw;
+}
+
+.entity-list {
+    display: inline-block;
+    vertical-align: top;
+    /*border: 1px solid black;*/
+    border-radius: 3px;
+    min-height: 6vh;
+    position: relative;
+    z-index: 1;
+    background-image: url("../images/Parchment.png");
+    background-size: 100% auto;
+    width: 45vw;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.five-percent-spacer {
+    width: 4.5vw;
+    display: inline-block;
+}
+
+.entity-list-item {
+    margin: 0;
+    height: 5vh;
+    padding-left: 6vw;
+    padding-top: .8vh;
+    padding-bottom: .8vh;
+}
+
+.parchment-top {
+    background-image: url("../images/ParchmentTopTest.png");
+    position: relative;
+    top: .5vh;
+    /*bottom: .15vh;*/
+    width: 45.1vw;
+    min-height: 3vh;
+    background-size: cover;
+    z-index: 2;
+}
+
+.parchment-bottom {
+    background-image: url("../images/ParchmentBottom.png");
+    position: relative;
+    bottom: 1vh;
+    width: 44.8vw;
+    min-height: 3vh;
+    background-size: cover;
+    z-index: 2;
+}
+
+.opaque {
+    opacity: 0.5;
+}
+
+.bordered {
+    border-bottom: black 1px solid;
+    margin-left: 1.05vw;
+    margin-right: 1.05vw;
+}
+
+.hide {
+    display: none;
+}
+
+.centered-li {
+    list-style: none;
+    text-align: center;
+}
+
+.font-medium {
+    font-size: 3vh;
+}
+
+.red {
+    color: red;
+}

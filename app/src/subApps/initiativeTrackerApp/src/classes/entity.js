@@ -1,10 +1,12 @@
 class Entity {
-    constructor(init, name = null, race = null, gameClass = null) {
+    constructor(id, init, name = null, race = null, gameClass = null) {
+        this.id = id;
         this.name = name;
         this.initiative = init;
-        this.delaying = false;
         this.class = gameClass;
         this.race = race ? race : "?????";
+        this.moving = false;
+        this.active = false;
     }
 }
 
