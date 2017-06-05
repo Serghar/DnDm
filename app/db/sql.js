@@ -15,3 +15,16 @@ const initialize = (() => {
     });
     db.close();
 })();
+
+// const GetAllMonsters = (() => {
+//     console.log(JSON.parse('[{"Name":"Scimitar","Description":"Melee Weapon Attack: +4 to hit, reach 5 ft, one target. Hit: 5 (1d6 + 2) slashing damage"},{"Name":"Shortbow","Description":"Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage"}]'));
+//     let db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE)
+//     db.serialize(() => {
+//         console.log("here");
+//         db.each("SELECT * FROM Monsters", (err, row) => {
+//             row.Actions = JSON.parse(row.Actions);
+//             console.log(row);
+//         });
+//     })
+//     db.close();
+// })();
