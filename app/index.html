@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>DnD Manager, for now...</title>
+    <link rel="stylesheet" href="./public/css/main.css">
     <link rel="stylesheet" href="bower_components/skeleton-framework/dist/skeleton.min.css">
   </head>
   <body>
@@ -15,7 +16,7 @@
       import App from './src/containers/App';
 
       const render = () => {
-        ReactDOM.render(<AppContainer><App /></AppContainer>, document.getElementById('root'));
+        ReactDOM.render(<App />, document.getElementById('root'));
       }
 
       render();

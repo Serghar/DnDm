@@ -1,0 +1,35 @@
+$navWidth: 100px;
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.main-window {
+    width: 100vw
+}
+
+::selection {
+    background:rgba(255, 255, 125, 0.99);
+    color: #032764;
+}
+
+nav {
+    display: inline-block;
+    border-right: 2px solid black;
+    width: $navWidth;
+    height: 90vh;
+}
+
+nav a {
+    width: 80px;
+    margin: 5px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+article {
+    display: inline-block;
+    height: 100vh;
+    margin-left: 5px;
+}
